@@ -1,0 +1,52 @@
+---
+title: "Toolik Lake Chlorophyll"
+author: "Dalila Lara"
+format: html
+editor: visual
+execute: 
+  echo: true
+  warning: false
+---
+
+### cache calls not to run code unless a change has been made already
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(skimr)
+```
+
+### Read in data using here function and read_csv
+### Clean data frame names with %>% 
+```{r}
+toolik_chlorophyll <- read_csv(here::here("data",
+                                          "data-raw",
+                                          "toolik_chlorophyll.csv"), 
+                               na = c(".")) %>% 
+  clean_names()
+```
+### Check data out
+### ?read_csv allows us to look at all functions 
+```{r}
+skim(toolik_chlorophyll)
+```
+
+### Quick graph ggplot
+```{r}
+chlorophyll_pprod_graph <- ggplot(data = toolik_chlorophyll, 
+                                  aes(x = active_chl_a_ug_l,
+                                      y = pprod_mg_available_c_m3_d)) +
+  geom_point()
+
+chlorophyll_pprod_graph
+```
+### Now saving the last plot we just ran can also specify it
+```{r}
+ggsave(plot = chlorophyll_pprod_graph,
+       here::here("figs", "my_awesome_graph.jpg"),
+       width = 8,
+       height = 8,
+       dpi = 200)
+```
+
